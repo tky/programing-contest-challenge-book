@@ -30,8 +30,9 @@ fn solve(l: i32, positions: Vec<i32>) -> (i32, i32) {
     for pattern in patterns {
         let ants = 
             izip!(positions.iter(), pattern.iter())
-            .map(|(p, d)| Ant { point: *p, direction: *d });
-        let distance = calculate(l, ants.collect());
+            .map(|(p, d)| Ant { point: *p, direction: *d })
+            .collect::<Vec<_>>();
+        let distance = calculate(l, &ants);
         if distance < min {
             min = distance;
         }
@@ -49,7 +50,7 @@ fn solve(l: i32, positions: Vec<i32>) -> (i32, i32) {
 // 左を基点として考える
 // 向きが左だったら現在の位置が端までの距離
 // 向きが右だったら棒の長さから現在の位置を引いた距離
-fn calculate(length: i32, ants: Vec<Ant>) -> i32 {
+fn calculate(length: i32, ants: &[Ant]) -> i32 {
     ants.iter().map(|ant| {
         match ant.direction {
             Direction::LEFT => ant.point,
