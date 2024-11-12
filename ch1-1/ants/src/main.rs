@@ -6,9 +6,9 @@ enum Direction {
     RIGHT
 }
 
-struct Ant {
+struct Ant<'a> {
     point: i32,
-    direction: Direction
+    direction: &'a Direction,
 }
 
 fn main() {
@@ -29,7 +29,7 @@ fn solve(l: i32, positions: Vec<i32>) -> (i32, i32) {
 
     for pattern in patterns {
         let ants = 
-            izip!(positions.iter(), pattern.iter().cloned())
+            izip!(positions.iter(), pattern.iter())
             .map(|(p, d)| Ant { point: *p, direction: *d });
         let distance = calculate(l, ants.collect());
         if distance < min {
