@@ -16,6 +16,11 @@ fn main() {
     resolve(&mut lake, 10, 12);
 }
 
+static DIRECTIONS: [(isize, isize); 8] = [
+    (-1, 0), (1, 0), (0, -1), (0, 1),
+    (-1, -1), (-1, 1), (1, -1), (1, 1),
+];
+
 fn resolve(lake: &mut [Vec<char>], n: usize, m: usize) {
     let mut count = 0;
     print_lake(lake, n, m);
@@ -44,36 +49,11 @@ fn dfs(lake: &mut [Vec<char>], i: usize, j: usize, n: usize, m: usize) {
         return;
     }
     lake[i][j] = '.';
-    // top
-    if i > 0 && lake[i - 1][j] == 'W' {
-        dfs(lake, i - 1, j, n, m);
-    }
-    // bottom
-    if i + 1 < n  && lake[i + 1][j] == 'W' {
-        dfs(lake, i + 1, j, n, m);
-    }
-    // left
-    if j > 0 && lake[i][j - 1] == 'W' {
-        dfs(lake, i, j - 1, n, m);
-    }
-    // right
-    if j + 1 < m && lake[i][j + 1] == 'W' {
-        dfs(lake, i, j + 1, n, m);
-    }
-    // top left
-    if i > 0 && j > 0 && lake[i - 1][j - 1] == 'W' {
-        dfs(lake, i - 1, j - 1, n, m);
-    }
-    // top right
-    if i > 0 && j + 1 < m && lake[i - 1][j + 1] == 'W' {
-        dfs(lake, i - 1, j + 1, n, m);
-    }
-    // bottom left
-    if i + 1 < n && j > 0 && lake[i + 1][j - 1] == 'W' {
-        dfs(lake, i + 1, j - 1, n, m);
-    }
-    // bottom right
-    if i + 1 < n && j + 1 < m && lake[i + 1][j + 1] == 'W' {
-        dfs(lake, i + 1, j + 1, n, m);
+    for &(dy, dx) in &DIRECTIONS {
+        let ni = i as isize + dy;
+        let nj = j as isize + dx;
+        if 0 <= ni && ni < n as isize && 0 <= nj && nj < m as isize {
+            dfs(lake, ni as usize, nj as usize, n, m);
+        }
     }
 }
