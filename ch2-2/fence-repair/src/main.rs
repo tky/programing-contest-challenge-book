@@ -27,19 +27,12 @@ fn resolve(ls: &[usize]) -> usize {
         min_heap.push(Reverse(l));
     }
 
-    loop {
-        match min_heap.pop() {
-            None => break,
-            Some(Reverse(l1)) => {
-                if let Some(Reverse(l2)) = min_heap.pop() {
-                    let new_board = l1 + l2;
-                    cost += new_board;
-                    min_heap.push(Reverse(new_board));
-                } else {
-                break;
-                }
-            }
-        }
+    while min_heap.len() > 1 {
+        let Reverse(l1) = min_heap.pop().unwrap();
+        let Reverse(l2) = min_heap.pop().unwrap();
+        let new_board = l1 + l2;
+        cost += new_board;
+        min_heap.push(Reverse(new_board));
     }
     cost
 }
