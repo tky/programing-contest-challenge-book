@@ -16,6 +16,23 @@ fn solve(a: &[usize]) -> usize {
     *dp.iter().max().unwrap()
 }
 
+fn solve2(a: &[usize]) -> usize {
+    let mut dp = vec![1 as usize; a.len()];
+    for i in 0..a.len() {
+        let mut tmp = 1;
+        for j in 0..i {
+            if a[i] > a[j] {
+                let p = dp[j] + 1;
+                if p > tmp {
+                    tmp = p;
+                }
+            }
+        }
+        dp[i] = tmp;
+    }
+    *dp.iter().max().unwrap()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -23,23 +40,27 @@ mod tests {
     #[test]
     fn test_solve() {
         assert_eq!(solve(&[4, 2, 3, 1, 5]), 3);
+        assert_eq!(solve2(&[4, 2, 3, 1, 5]), 3);
     }
 
     #[test]
     fn test_increasing_sequence() {
         let a = vec![1, 2, 3, 4, 5];
         assert_eq!(solve(&a), 5);
+        assert_eq!(solve2(&a), 5);
     }
 
     #[test]
     fn test_decreasing_sequence() {
         let a = vec![5, 4, 3, 2, 1];
         assert_eq!(solve(&a), 1);
+        assert_eq!(solve2(&a), 1);
     }
 
     #[test]
     fn test_mixed_sequence() {
         let a = vec![10, 22, 9, 33, 21, 50, 41, 60, 80];
         assert_eq!(solve(&a), 6);
+        assert_eq!(solve2(&a), 6);
     }
 }
