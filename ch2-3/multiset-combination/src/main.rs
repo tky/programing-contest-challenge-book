@@ -16,7 +16,7 @@ fn solve(vs: &[usize], m: usize) -> usize {
 
     for i in 1..vs.len() + 1 {
         for j in 0..m + 1 {
-            dp[i][j] = (0..min(vs[i - 1], j) + 1).map(|k| dp[i - 1][j - k]).sum();
+            dp[i][j] = (0..=min(vs[i - 1], j)).map(|k| dp[i - 1][j - k]).sum();
         }
     }
     dp[vs.len()][m]
