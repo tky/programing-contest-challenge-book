@@ -11,7 +11,7 @@ fn resolve(l: i32, p: i32, a: &[i32], b: &[i32]) -> i32 {
     let mut que: BinaryHeap<i32> = BinaryHeap::new();
 
     // 最後の位置をゴールに設定
-    // bの方は使わないので適当に0を入れておく
+    // ゴール地点を給油なしの補給所として追加
     let mut a = a.to_vec();
     let mut b = b.to_vec();
     a.push(l);
