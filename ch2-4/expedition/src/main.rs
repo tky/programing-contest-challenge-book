@@ -8,7 +8,7 @@ fn resolve(l: i32, p: i32, a: &[i32], b: &[i32]) -> i32 {
     let mut ans = 0;
     let mut pos = 0;
     let mut tank = p;
-    let mut que = BinaryHeap::new();
+    let mut que: BinaryHeap<i32> = BinaryHeap::new();
 
     // 最後の位置をゴールに設定
     // bの方は使わないので適当に0を入れておく
