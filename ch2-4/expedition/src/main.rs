@@ -19,7 +19,7 @@ fn resolve(l: i32, p: i32, a: &[i32], b: &[i32]) -> i32 {
 
     for i in 0..a.len() {
         let d = (a[i] - pos) as i32;
-        while tank - d < 0 {
+        while tank < d {
             if que.is_empty() {
                 return -1;
             }
