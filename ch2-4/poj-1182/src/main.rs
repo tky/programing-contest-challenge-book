@@ -9,10 +9,7 @@ fn resolve(n: usize, informations: &[(Type, usize, usize)]) -> Vec<usize> {
     let mut uf = QuickUnionUf::<UnionBySize>::new(n * 3);
     let mut ans = vec![];
 
-    for (i, (t, x, y)) in informations.iter().enumerate() {
-        let x = *x;
-        let y = *y;
-
+    for (i, (t, x, y)) in informations.iter().map(|(t, x, y)| (t, *x, *y)).enumerate() {
         if x >= n || y >= n {
             ans.push(i);
             continue;
