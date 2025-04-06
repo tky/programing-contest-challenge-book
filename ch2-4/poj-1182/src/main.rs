@@ -5,28 +5,11 @@ enum Type {
     Type2,
 }
 
-fn main() {
-    let mut uf = QuickUnionUf::<UnionBySize>::new(10);
-
-    for i in 0..10 {
-        assert_eq!(uf.find(i), i);
-    }
-
-    uf.union(0, 1);
-
-    assert_eq!(uf.find(0), 0);
-    assert_eq!(uf.find(1), 0);
-    assert_eq!(uf.find(1), uf.find(0));
-}
-
 fn resolve(n: usize, informations: &[(Type, usize, usize)]) -> Vec<usize> {
     let mut uf = QuickUnionUf::<UnionBySize>::new(n * 3);
     let mut ans = vec![];
 
-    for i in 0..informations.len() {
-        let info = &informations[i];
-
-        let (t, x, y) = info;
+    for (i, (t, x, y)) in informations.iter().enumerate() {
         let x = *x;
         let y = *y;
 
@@ -72,6 +55,8 @@ fn resolve(n: usize, informations: &[(Type, usize, usize)]) -> Vec<usize> {
     }
     ans
 }
+
+fn main() {}
 
 #[cfg(test)]
 mod tests {
