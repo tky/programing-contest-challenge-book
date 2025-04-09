@@ -20,12 +20,13 @@ fn resolve(graph: &[Vec<usize>]) -> bool {
 
 fn dfs(graph: &[Vec<usize>], colors: &mut [i32], node: usize, color: i32) -> bool {
     colors[node] = color;
-    for i in 0..graph[node].len() {
-        if colors[graph[node][i]] == color {
+
+    for &neighbor in &graph[node] {
+        if colors[neighbor] == color {
             return false;
         }
 
-        if colors[graph[node][i]] == 0 && !dfs(graph, colors, graph[node][i], -color) {
+        if colors[neighbor] == 0 && !dfs(graph, colors, neighbor, -color) {
             return false;
         }
     }
