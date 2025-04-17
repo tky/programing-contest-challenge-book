@@ -29,7 +29,7 @@ fn resolve(graph: &[Vec<u32>]) -> u32 {
                 result += cost;
                 mst[v] = true;
                 graph[v].iter().enumerate().for_each(|(u, &cost)| {
-                    if cost > 0 {
+                    if cost > 0 && !mst[u] {
                         heap.push(Reverse((cost, u)));
                     }
                 })
