@@ -12,6 +12,7 @@ fn resolve(graph: &[Vec<u32>]) -> u32 {
     let mut mst = vec![false; graph.len()];
     let mut result = 0;
     let mut heap = BinaryHeap::new();
+    let mut visited_count = 1;
 
     graph[0].iter().enumerate().for_each(|(v, &cost)| {
         if cost > 0 {
@@ -20,7 +21,7 @@ fn resolve(graph: &[Vec<u32>]) -> u32 {
     });
     mst[0] = true;
 
-    while mst.iter().any(|&x| !x) {
+    while visited_count < graph.len() {
         match heap.pop() {
             Some(Reverse((cost, v))) => {
                 if mst[v] {
@@ -28,6 +29,7 @@ fn resolve(graph: &[Vec<u32>]) -> u32 {
                 }
                 result += cost;
                 mst[v] = true;
+                visited_count += 1;
                 graph[v].iter().enumerate().for_each(|(u, &cost)| {
                     if cost > 0 && !mst[u] {
                         heap.push(Reverse((cost, u)));
