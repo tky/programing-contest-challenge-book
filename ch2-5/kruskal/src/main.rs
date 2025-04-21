@@ -18,13 +18,13 @@ for each edge e in E' (昇順ソート済み):
     end if
 end for
  */
-fn resolve(n: usize, graph: &mut [Edge]) -> Option<usize> {
-    graph.sort_by(|a, b| a.cost.cmp(&b.cost));
+fn resolve(n: usize, edges: &mut [Edge]) -> Option<usize> {
+    edges.sort_by(|a, b| a.cost.cmp(&b.cost));
     let mut uf = QuickUnionUf::<UnionBySize>::new(n);
 
     let mut total_cost = 0;
 
-    graph.iter().for_each(|edge| {
+    edges.iter().for_each(|edge| {
         if uf.find(edge.from) != uf.find(edge.to) {
             total_cost += edge.cost;
             uf.union(edge.from, edge.to);
