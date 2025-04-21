@@ -19,7 +19,7 @@ for each edge e in E' (昇順ソート済み):
 end for
  */
 fn resolve(n: usize, edges: &mut [Edge]) -> Option<usize> {
-    edges.sort_by(|a, b| a.cost.cmp(&b.cost));
+    edges.sort_by_key(|edge| edge.cost);
     let mut uf = QuickUnionUf::<UnionBySize>::new(n);
 
     let mut total_cost = 0;
