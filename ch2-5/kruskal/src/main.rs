@@ -23,15 +23,21 @@ fn resolve(n: usize, edges: &mut [Edge]) -> Option<usize> {
     let mut uf = QuickUnionUf::<UnionBySize>::new(n);
 
     let mut total_cost = 0;
+    let mut used_edges = 0;
 
     for edge in edges {
         if uf.find(edge.from) != uf.find(edge.to) {
             total_cost += edge.cost;
+            used_edges += 1;
             uf.union(edge.from, edge.to);
+
+            if used_edges == n.saturating_sub(1) {
+                return Some(total_cost);
+            }
         }
     }
 
-    Some(total_cost)
+    None
 }
 
 #[cfg(test)]
