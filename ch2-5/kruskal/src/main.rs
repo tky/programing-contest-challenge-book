@@ -24,12 +24,12 @@ fn resolve(n: usize, edges: &mut [Edge]) -> Option<usize> {
 
     let mut total_cost = 0;
 
-    edges.iter().for_each(|edge| {
+    for edge in edges {
         if uf.find(edge.from) != uf.find(edge.to) {
             total_cost += edge.cost;
             uf.union(edge.from, edge.to);
         }
-    });
+    }
 
     Some(total_cost)
 }
