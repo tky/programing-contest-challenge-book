@@ -14,7 +14,7 @@ type VisitMap = Vec<Vec<bool>>;
 type VisitMapMut<'a> = &'a mut VisitMap;
 
 fn solve(map: MapRef) -> usize {
-    let pos = find_position(&map, '@');
+    let pos = find_position(&map, '@').expect("Position of '@' not found");
     let mut visited = vec![vec![false; map[0].len()]; map.len()];
     let ans = calculate(
         map,
@@ -60,15 +60,15 @@ fn calculate(map: MapRef, visited: VisitMapMut, w: isize, h: isize, pos: (usize,
     ans
 }
 
-fn find_position(map: MapRef, c: char) -> (usize, usize) {
+fn find_position(map: MapRef, c: char) -> Option<(usize, usize)> {
     for i in 0..map.len() {
         for j in 0..map[i].len() {
             if map[i][j] == c {
-                return (i, j);
+                return Some((i, j));
             }
         }
     }
-    (0, 0)
+    None
 }
 
 #[cfg(test)]
