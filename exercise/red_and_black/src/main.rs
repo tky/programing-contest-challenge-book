@@ -9,8 +9,11 @@ fn main() {
 }
 
 const DIRECTIONS: [(isize, isize); 4] = [(1, 0), (0, 1), (0, -1), (-1, 0)];
+type MapRef<'a> = &'a [Vec<char>];
+type VisitMap = Vec<Vec<bool>>;
+type VisitMapMut<'a> = &'a mut VisitMap;
 
-fn solve(map: &Vec<Vec<char>>) -> usize {
+fn solve(map: MapRef) -> usize {
     let pos = find_position(&map, '@');
     let mut visited = vec![vec![false; map[0].len()]; map.len()];
     let ans = calculate(
@@ -34,13 +37,7 @@ fn solve(map: &Vec<Vec<char>>) -> usize {
     ans
 }
 
-fn calculate(
-    map: &Vec<Vec<char>>,
-    visited: &mut Vec<Vec<bool>>,
-    w: isize,
-    h: isize,
-    pos: (usize, usize),
-) -> usize {
+fn calculate(map: MapRef, visited: VisitMapMut, w: isize, h: isize, pos: (usize, usize)) -> usize {
     let (x, y) = pos;
     if map[x][y] == '#' {
         return 0;
@@ -63,7 +60,7 @@ fn calculate(
     ans
 }
 
-fn find_position(map: &Vec<Vec<char>>, c: char) -> (usize, usize) {
+fn find_position(map: MapRef, c: char) -> (usize, usize) {
     for i in 0..map.len() {
         for j in 0..map[i].len() {
             if map[i][j] == c {
