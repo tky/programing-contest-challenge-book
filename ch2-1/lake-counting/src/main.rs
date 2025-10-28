@@ -1,6 +1,6 @@
 fn main() {
     // 10 * 12
-    let mut lake =  vec! [
+    let mut lake = vec![
         vec!['W', 'W', '.', '.', '.', '.', '.', '.', '.', 'W', 'W', '.'],
         vec!['.', 'W', 'W', 'W', '.', '.', '.', '.', '.', 'W', 'W', 'W'],
         vec!['.', '.', '.', 'W', 'W', 'W', '.', '.', '.', 'W', 'W', '.'],
@@ -17,8 +17,14 @@ fn main() {
 }
 
 static DIRECTIONS: [(isize, isize); 8] = [
-    (-1, 0), (1, 0), (0, -1), (0, 1),
-    (-1, -1), (-1, 1), (1, -1), (1, 1),
+    (-1, 0),
+    (1, 0),
+    (0, -1),
+    (0, 1),
+    (-1, -1),
+    (-1, 1),
+    (1, -1),
+    (1, 1),
 ];
 
 fn resolve(lake: &mut [Vec<char>], n: usize, m: usize) {
@@ -50,10 +56,10 @@ fn dfs(lake: &mut [Vec<char>], i: usize, j: usize, n: usize, m: usize) {
     }
     lake[i][j] = '.';
     for &(dy, dx) in &DIRECTIONS {
-        let ni = i as isize + dy;
-        let nj = j as isize + dx;
-        if 0 <= ni && ni < n as isize && 0 <= nj && nj < m as isize {
-            dfs(lake, ni as usize, nj as usize, n, m);
+        if let (Some(ni), Some(nj)) = (i.checked_add_signed(dy), j.checked_add_signed(dx)) {
+            if ni < n && nj < m {
+                dfs(lake, ni, nj, n, m);
+            }
         }
     }
 }
