@@ -1,52 +1,58 @@
 use queues::*;
 
 fn main() {
-  let map = 
-    to_vec_2d(
-    &[
-    "#S######.#",
-    "......#..#",
-    ".#.##.##.#",
-    ".#........",
-    "##.##.####",
-    "....#....#",
-    ".#######.#",
-    "....#.....",
-    ".####.###.",
-    "...#....G#",
-  ]);
-  let reslut = solve(map, 6, 10, 0, 1);
-  print_result(reslut);
+    let map = to_vec_2d(&[
+        "#S######.#",
+        "......#..#",
+        ".#.##.##.#",
+        ".#........",
+        "##.##.####",
+        "....#....#",
+        ".#######.#",
+        "....#.....",
+        ".####.###.",
+        "...#....G#",
+    ]);
+    let result = solve(map, 10, 10);
+    print_result(result);
 }
 
-static INF: i32 = 1000000000;
-static DIRECTIONS: [(isize, isize); 4] = [
-    (-1, 0), (1, 0), (0, -1), (0, 1),
-];
+type Maze = Vec<Vec<char>>;
 
-fn solve(map: Vec<Vec<char>>, n: usize, m: usize, sx: usize, sy: usize) -> Vec<Vec<i32>> {
+static INF: i32 = 1000000000;
+static DIRECTIONS: [(isize, isize); 4] = [(-1, 0), (1, 0), (0, -1), (0, 1)];
+
+fn find_start(map: &Maze, n: usize, m: usize) -> (usize, usize) {
+    for i in 0..n {
+        for j in 0..m {
+            if map[i][j] == 'S' {
+                return (i, j);
+            }
+        }
+    }
+    panic!("Start point not found");
+}
+
+fn solve(map: Maze, n: usize, m: usize) -> Vec<Vec<i32>> {
+    let (sx, sy) = find_start(&map, n, m);
     let mut distance = vec![vec![INF; m]; n];
     let mut q: Queue<(usize, usize)> = queue![];
 
-    let _ = q.add((sx, sy));
+    q.add((sx, sy)).unwrap();
     distance[sx][sy] = 0;
 
     while q.size() != 0 {
-        let p = q.remove().unwrap();
-        if map[p.0][p.1] == 'G' {
+        let (x, y) = q.remove().unwrap();
+        if map[x][y] == 'G' {
             break;
         }
         for &(dx, dy) in &DIRECTIONS {
-            let nx = p.0 as isize + dx;
-            let ny = p.1 as isize + dy;
-            // if inside the maze
-            if 0 <= nx && nx < n as isize && 0 <= ny && ny < m as isize {
-                // and next cell is not a wall and not visited
-                let nx = nx as usize;
-                let ny = ny as usize;
-                if map[nx][ny] != '#' && distance[nx][ny] == INF {
-                    let _ = q.add((nx, ny));
-                    distance[nx][ny] = distance[p.0][p.1] + 1;
+            if let (Some(nx), Some(ny)) = (x.checked_add_signed(dx), y.checked_add_signed(dy)) {
+                if nx < n && ny < m {
+                    if map[nx][ny] != '#' && distance[nx][ny] == INF {
+                        q.add((nx, ny)).unwrap();
+                        distance[nx][ny] = distance[x][y] + 1;
+                    }
                 }
             }
         }
@@ -67,8 +73,6 @@ fn print_result(distance: Vec<Vec<i32>>) {
     }
 }
 
-fn to_vec_2d(lines: &[&str]) -> Vec<Vec<char>> {
-    lines.iter()
-        .map(|line| line.chars().collect())
-        .collect()
+fn to_vec_2d(lines: &[&str]) -> Maze {
+    lines.iter().map(|line| line.chars().collect()).collect()
 }
