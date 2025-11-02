@@ -17,10 +17,14 @@ fn solve(xs: &[usize], r: usize) -> Vec<usize> {
     result
 }
 
+// xからrの範囲内でできるだけ遠いインデックスを返す
 fn last_index_within_limit(xs: &[usize], x: usize, r: usize) -> usize {
+    // limit以内の最大のインデックスを探す
     let limit = xs[x] + r;
+
+    // xsの最後から探索して、limit以下の最初の要素を見つける
+    // xs[index] <= limitとなった時点でその前のindexが答え
     let mut index = xs.len() - 1;
-    // ここを二分探索すると性能改善できると思われる
     while xs[index] > limit {
         index -= 1;
     }
@@ -42,28 +46,40 @@ mod tests {
         let r = 10;
         let x = 0;
         let index = last_index_within_limit(&xs, x, r);
-        assert_eq!(index, 1, "xs[1] = 7 は 11 以下、xs[2] = 15 は 11 超 => index=1 が正");
+        assert_eq!(
+            index, 1,
+            "xs[1] = 7 は 11 以下、xs[2] = 15 は 11 超 => index=1 が正"
+        );
 
         // 例2: x=1 => limit = 7 + 10 = 17
         //       xs[1..] = [7, 15, 20, 30, 50]
         //       20 は 17 を超えるのでNG、最大は 15 => インデックス2
         let x = 1;
         let index = last_index_within_limit(&xs, x, r);
-        assert_eq!(index, 2, "xs[2] = 15 は 17 以下、xs[3] = 20 は 17 超 => index=2 が正");
+        assert_eq!(
+            index, 2,
+            "xs[2] = 15 は 17 以下、xs[3] = 20 は 17 超 => index=2 が正"
+        );
 
         // 例3: x=2 => limit = 15 + 10 = 25
         //       xs[2..] = [15, 20, 30, 50]
         //       30 は 25 を超える => 最大は 20 => インデックス3
         let x = 2;
         let index = last_index_within_limit(&xs, x, r);
-        assert_eq!(index, 3, "xs[3] = 20 は 25 以下、xs[4] = 30 は 25 超 => index=3 が正");
+        assert_eq!(
+            index, 3,
+            "xs[3] = 20 は 25 以下、xs[4] = 30 は 25 超 => index=3 が正"
+        );
 
         // 例4: x=3 => limit = 20 + 10 = 30
         //       xs[3..] = [20, 30, 50]
         //       30 は 30 以下 => インデックス4
         let x = 3;
         let index = last_index_within_limit(&xs, x, r);
-        assert_eq!(index, 4, "xs[4] = 30 は 30 以下、xs[5] = 50 は 30 超 => index=4 が正");
+        assert_eq!(
+            index, 4,
+            "xs[4] = 30 は 30 以下、xs[5] = 50 は 30 超 => index=4 が正"
+        );
     }
 
     #[test]
@@ -152,7 +168,10 @@ mod tests {
         let result = solve(&xs, r);
         // 単一要素なら [0] が返るはず
         assert_eq!(result, vec![0], "単一要素の場合は [0] になる");
-        assert!(is_all_covered(&xs, r, &result), "単一点は左右カバー範囲に含まれる");
+        assert!(
+            is_all_covered(&xs, r, &result),
+            "単一点は左右カバー範囲に含まれる"
+        );
     }
 
     #[test]
@@ -161,7 +180,10 @@ mod tests {
         let xs = vec![2, 3, 4, 5];
         let r = 10;
         let result = solve(&xs, r);
-        assert!(is_all_covered(&xs, r, &result), "全ての点がカバーされている必要があります");
+        assert!(
+            is_all_covered(&xs, r, &result),
+            "全ての点がカバーされている必要があります"
+        );
         // 最適なら印は1つで十分
         assert_eq!(result.len(), 1, "1つの印で全点をカバーできるはず");
     }
@@ -172,7 +194,10 @@ mod tests {
         let xs = vec![1, 7, 15, 20, 30, 50];
         let r = 10;
         let result = solve(&xs, r);
-        assert!(is_all_covered(&xs, r, &result), "全ての点がカバーされている必要があります");
+        assert!(
+            is_all_covered(&xs, r, &result),
+            "全ての点がカバーされている必要があります"
+        );
         // 一般的な貪欲法の解では 3 箇所でカバーできる例が多いので、印の数が 3 であることを確認
         assert_eq!(result.len(), 3, "この例では印3箇所で全点カバーできるはず");
     }
@@ -183,7 +208,10 @@ mod tests {
         let xs = vec![1, 2, 10, 11, 20, 21];
         let r = 2;
         let result = solve(&xs, r);
-        assert!(is_all_covered(&xs, r, &result), "全ての点が左右のカバー範囲でカバーされている必要があります");
+        assert!(
+            is_all_covered(&xs, r, &result),
+            "全ての点が左右のカバー範囲でカバーされている必要があります"
+        );
         // ここでは印が必要最低限配置されているかより、すべての点がカバーされているかを重視
         assert!(!result.is_empty(), "少なくとも1箇所は印が必要");
     }
@@ -194,6 +222,9 @@ mod tests {
         let xs = vec![5, 10, 15, 25, 26, 27];
         let r = 3;
         let result = solve(&xs, r);
-        assert!(is_all_covered(&xs, r, &result), "全ての点が左右カバー範囲でカバーされていなければなりません");
+        assert!(
+            is_all_covered(&xs, r, &result),
+            "全ての点が左右カバー範囲でカバーされていなければなりません"
+        );
     }
 }
